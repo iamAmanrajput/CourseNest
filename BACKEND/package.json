@@ -1,0 +1,22 @@
+{
+  "name": "coursenest",
+  "version": "1.0.0",
+  "description": "Full Stack Course Selling App",
+  "keywords": [
+    "Course-App"
+  ],
+  "license": "ISC",
+  "author": "Aman Singh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0",
+    "nodemon": "^3.1.9"
+  }
+}
