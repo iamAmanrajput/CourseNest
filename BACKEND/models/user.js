@@ -12,12 +12,13 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    union: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
+    select: false,
   },
 });
 
-module.exports.User = mongoose.model("User", userSchema);
+module.exports = mongoose.model("User", userSchema);
