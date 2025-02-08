@@ -23,6 +23,7 @@ app.use(
 
 //defining routes
 app.use("/api/v1/course", require("./routes/course"));
+app.use("/api/v1/user", require("./routes/user"));
 
 // Start Server
 app.listen(PORT, () => {
