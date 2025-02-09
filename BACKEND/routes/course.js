@@ -7,7 +7,10 @@ const {
   deleteCourse,
   getCourses,
   courseDetails,
+  buyCourses,
 } = require("../controllers/course");
+
+const { isLoggedin } = require("../middlewares/auth");
 
 router.route("/create").post(createCourse);
 
@@ -18,5 +21,7 @@ router.route("/delete/:courseId").delete(deleteCourse);
 router.route("/courses").get(getCourses);
 
 router.route("/:courseId").get(courseDetails);
+
+router.route("/buy/:courseId").get(isLoggedin, buyCourses);
 
 module.exports = router;

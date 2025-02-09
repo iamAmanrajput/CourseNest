@@ -176,3 +176,11 @@ exports.courseDetails = async (req, res) => {
     });
   }
 };
+
+//buy course
+
+exports.buyCourses = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+  } catch (error) {}
+};
