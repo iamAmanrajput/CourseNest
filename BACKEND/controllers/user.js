@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
+const Purchase = require("../models/purchase");
 
 exports.signup = async (req, res) => {
   try {
@@ -132,6 +133,35 @@ exports.logout = (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error in logout",
+    });
+  }
+};
+
+exports.purchases = async (req, res) => {
+  try {
+    const { userId } = req;
+
+    // Fetch purchases for the user
+    const purchases = await Purchase.find({ userId }).populate("courseId"); // Populate course details if needed
+
+    if (purchases.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User has not purchased any courses",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Purchases fetched successfully",
+      purchases, // Include the purchases in the response
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching purchased courses",
+      error: error.message,
     });
   }
 };

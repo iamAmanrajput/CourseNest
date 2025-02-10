@@ -1,6 +1,7 @@
 const Course = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const Purchase = require("../models/purchase");
 require("dotenv").config();
 
 //create course
@@ -37,6 +38,7 @@ exports.createCourse = async (req, res) => {
       .status(201)
       .json({ success: true, message: "Course Created Successfully", course });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something Went Wrong While Creating Order",
@@ -181,6 +183,40 @@ exports.courseDetails = async (req, res) => {
 
 exports.buyCourses = async (req, res) => {
   try {
+    const { userId } = req;
     const { courseId } = req.params;
-  } catch (error) {}
+
+    // Check if the course exists
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Course Not Found" });
+    }
+
+    // Check if the user already purchased the course
+    const existingPurchase = await Purchase.findOne({ userId, courseId });
+    if (existingPurchase) {
+      return res.status(400).json({
+        success: false,
+        message: "User Already Purchased this Course",
+      });
+    }
+
+    // Create a new purchase
+    const newPurchase = await Purchase.create({ userId, courseId });
+
+    // Respond with success message
+    return res.status(201).json({
+      success: true,
+      message: "Course purchased successfully",
+      purchase: newPurchase,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while buying the course",
+      error: error.message,
+    });
+  }
 };
