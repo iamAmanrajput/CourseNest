@@ -11,12 +11,13 @@ const {
 } = require("../controllers/course");
 
 const { isLoggedin } = require("../middlewares/auth");
+const { isAdminLoggedin } = require("../middlewares/admin");
 
-router.route("/create").post(createCourse);
+router.route("/create").post(isAdminLoggedin, createCourse);
 
-router.route("/update/:courseId").put(updateCourse);
+router.route("/update/:courseId").put(isAdminLoggedin, updateCourse);
 
-router.route("/delete/:courseId").delete(deleteCourse);
+router.route("/delete/:courseId").delete(isAdminLoggedin, deleteCourse);
 
 router.route("/courses").get(getCourses);
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const fileUpload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
@@ -14,6 +15,7 @@ cloudinaryConnect();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -24,6 +26,9 @@ app.use(
 //defining routes
 app.use("/api/v1/course", require("./routes/course"));
 app.use("/api/v1/user", require("./routes/user"));
+
+//admin routes
+app.use("/api/v1/admin", require("./routes/admin"));
 
 // Start Server
 app.listen(PORT, () => {

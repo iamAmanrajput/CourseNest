@@ -7,6 +7,7 @@ require("dotenv").config();
 //create course
 exports.createCourse = async (req, res) => {
   try {
+    const { adminId } = req;
     const { title, description, price } = req.body;
     const { image } = req.files;
     if (!title || !description || !price) {
@@ -32,6 +33,7 @@ exports.createCourse = async (req, res) => {
         public_id: courseImage.public_id,
         url: courseImage.secure_url,
       },
+      creatorId: adminId,
     };
     const course = await Course.create(courseData);
     return res
@@ -50,8 +52,8 @@ exports.createCourse = async (req, res) => {
 exports.updateCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
-    console.log(courseId);
-    const course = await Course.findById(courseId);
+    const { adminId } = req;
+    const course = await Course.findOne({ _id: courseId, creatorId: adminId });
     if (!course) {
       return res
         .status(404)
@@ -106,8 +108,12 @@ exports.updateCourse = async (req, res) => {
 //delete course
 exports.deleteCourse = async (req, res) => {
   try {
+    const { adminId } = req;
     const { courseId } = req.params;
-    const course = await Course.findByIdAndDelete(courseId);
+    const course = await Course.findOneAndDelete({
+      _id: courseId,
+      creatorId: adminId,
+    });
 
     if (!course) {
       return res

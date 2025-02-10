@@ -1,12 +1,11 @@
-const User = require("../models/user");
+const Admin = require("../models/admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { z } = require("zod");
-const Purchase = require("../models/purchase");
 
 exports.signup = async (req, res) => {
   try {
-    const userSchema = z.object({
+    const adminSchema = z.object({
       firstName: z
         .string()
         .min(3, { message: "First name must be at least 3 characters long" }),
@@ -19,7 +18,7 @@ exports.signup = async (req, res) => {
         .min(6, { message: "Password must be at least 6 characters long" }),
     });
 
-    const validatedData = userSchema.safeParse(req.body);
+    const validatedData = adminSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
         success: false,
@@ -29,7 +28,7 @@ exports.signup = async (req, res) => {
 
     const { firstName, lastName, email, password } = validatedData.data;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await Admin.findOne({ email });
     if (existingUser) {
       return res
         .status(400)
@@ -38,7 +37,7 @@ exports.signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    const admin = await Admin.create({
       firstName,
       lastName,
       email,
@@ -47,7 +46,7 @@ exports.signup = async (req, res) => {
 
     return res
       .status(201)
-      .json({ success: true, message: "Signup Successful", user });
+      .json({ success: true, message: "Signup Successful", admin });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -58,14 +57,14 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const userSchema = z.object({
+    const adminSchema = z.object({
       email: z.string().email({ message: "Invalid email format" }),
       password: z
         .string()
         .min(6, { message: "Password must be at least 6 characters long" }),
     });
 
-    const validatedData = userSchema.safeParse(req.body);
+    const validatedData = adminSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
         success: false,
@@ -75,22 +74,23 @@ exports.login = async (req, res) => {
 
     const { email, password } = validatedData.data;
 
-    const user = await User.findOne({ email }).select("+password");
-    if (!user) {
+    const admin = await Admin.findOne({ email }).select("+password");
+    if (!admin) {
+      // Fixed the typo (was `user`)
       return res
         .status(404)
         .json({ success: false, message: "User not registered" });
     }
 
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(password, admin.password);
     if (!isPasswordMatch) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid credentials" });
     }
 
-    const payload = { id: user._id };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const payload = { id: admin._id };
+    const token = jwt.sign(payload, process.env.JWT_ADMIN_SECRET, {
       expiresIn: "1d",
     });
 
@@ -103,16 +103,16 @@ exports.login = async (req, res) => {
 
     res.cookie("jwt", token, cookieOptions).status(200).json({
       success: true,
-      message: "User logged in successfully",
+      message: "Admin logged in successfully",
       token,
-      user,
+      admin,
     });
   } catch (error) {
     console.error("Login Error:", error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong while logging in",
-      error: error.message,
+      error: error.message, // Added actual error message for debugging
     });
   }
 };
@@ -138,35 +138,6 @@ exports.logout = (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error in logout",
-    });
-  }
-};
-
-exports.purchases = async (req, res) => {
-  try {
-    const { userId } = req;
-
-    // Fetch purchases for the user
-    const purchases = await Purchase.find({ userId }).populate("courseId"); // Populate course details if needed
-
-    if (purchases.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "User has not purchased any courses",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Purchases fetched successfully",
-      purchases, // Include the purchases in the response
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching purchased courses",
-      error: error.message,
     });
   }
 };
