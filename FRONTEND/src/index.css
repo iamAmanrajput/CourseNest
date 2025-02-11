@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@theme {
+  --color-powder-blue: #bbdefb; /* Powder Blue --background */
+  --color-pure-white: #ffffff; /* Pure White --background-alt */
+  --color-dark-sapphire: #0d47a1; /* Dark Sapphire Blue --heading */
+  --color-charcoal-gray: #333333; /* Charcoal Gray --body text */
+  --color-golden-yellow: #ffc107; /* Golden Yellow --button */
+}
