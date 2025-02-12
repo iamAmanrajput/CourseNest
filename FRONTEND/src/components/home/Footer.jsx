@@ -7,7 +7,7 @@ import Logo from "../../assets/Logo.png";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-between h-60 items-center border-t-powder-blue border-t-2 rounded-2xl">
+    <footer className="flex justify-between h-40 items-center border-t-powder-blue border-t-2 rounded-2xl">
       <div>
         <Link to="/" className="flex items-center">
           <img src={Logo} alt="logo" className="h-12 w-auto mr-2" />
