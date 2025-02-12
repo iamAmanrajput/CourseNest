@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 require("dotenv").config();
 
@@ -20,6 +21,14 @@ app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
+  })
+);
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // React App ka URL
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    credentials: true, // Allow cookies/session
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 

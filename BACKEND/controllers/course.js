@@ -139,7 +139,7 @@ exports.deleteCourse = async (req, res) => {
 //get courses
 exports.getCourses = async (req, res) => {
   try {
-    const courses = await Course.find({}).populate("user");
+    const courses = await Course.find({}).populate("creatorId");
 
     if (courses.length === 0) {
       return res
@@ -153,6 +153,7 @@ exports.getCourses = async (req, res) => {
       courses,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something Went Wrong While Fetching Courses",
