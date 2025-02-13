@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 function Signup() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(""); // Error state added
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,20 +20,28 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Reset error before making the request
     try {
       const response = await axios.post(
         "http://localhost:4000/api/v1/user/signup",
         formData,
-        { withCredentials: true, "Content-Type": "application/json" }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+
       if (response.data.success) {
         toast.success(response.data.message);
         navigate("/login");
+        setFormData({ firstName: "", lastName: "", email: "", password: "" }); // Reset form data
       } else {
-        toast.error(response.data.message);
+        setError(response.data.message); // Show error message
       }
     } catch (error) {
-      toast.error(
+      setError(
         error.response?.data?.message || "Signup failed. Please try again."
       );
     }
@@ -145,6 +154,14 @@ function Signup() {
                 </span>
               </div>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <p className="text-red-500 text-sm font-medium text-center mb-3">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
               className="w-full bg-blue-400 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all"

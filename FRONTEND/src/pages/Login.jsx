@@ -1,9 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState(""); // Error state added
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Reset previous error before new request
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/user/login",
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        localStorage.setItem("user", JSON.stringify(response.data.token));
+        navigate("/");
+        setFormData({});
+      } else {
+        setError(response.data.message); // Show error above button
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || "Login Failed!"); // Show error message
+    }
+  };
 
   const goToSignup = () => {
     navigate("/signup");
@@ -35,7 +74,7 @@ function Login() {
           </p>
 
           {/* Form */}
-          <form className="mt-6">
+          <form onSubmit={handleSubmit} className="mt-6">
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -46,6 +85,10 @@ function Login() {
               <input
                 id="email"
                 type="email"
+                value={formData.email}
+                required
+                onChange={handleChange}
+                name="email"
                 placeholder="You@example.com"
                 className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -62,6 +105,10 @@ function Login() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your Password"
+                  value={formData.password}
+                  required
+                  onChange={handleChange}
+                  name="password"
                   className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span
@@ -72,6 +119,14 @@ function Login() {
                 </span>
               </div>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <p className="text-red-500 text-sm font-medium text-center mb-3">
+                {error}
+              </p>
+            )}
+
             <button className="w-full bg-blue-400 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all">
               Log In
             </button>

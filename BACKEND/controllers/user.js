@@ -7,16 +7,21 @@ const Purchase = require("../models/purchase");
 exports.signup = async (req, res) => {
   try {
     const userSchema = z.object({
-      firstName: z
+      firstName: z.string().min(3, {
+        status: false,
+        message: "First name must be at least 3 characters long",
+      }),
+      lastName: z.string().min(3, {
+        status: false,
+        message: "Last name must be at least 3 characters long",
+      }),
+      email: z
         .string()
-        .min(3, { message: "First name must be at least 3 characters long" }),
-      lastName: z
-        .string()
-        .min(3, { message: "Last name must be at least 3 characters long" }),
-      email: z.string().email({ message: "Invalid email format" }),
-      password: z
-        .string()
-        .min(6, { message: "Password must be at least 6 characters long" }),
+        .email({ status: false, message: "Invalid email format" }),
+      password: z.string().min(6, {
+        status: false,
+        message: "Password must be at least 6 characters long",
+      }),
     });
 
     const validatedData = userSchema.safeParse(req.body);
@@ -59,10 +64,13 @@ exports.signup = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const userSchema = z.object({
-      email: z.string().email({ message: "Invalid email format" }),
-      password: z
+      email: z
         .string()
-        .min(6, { message: "Password must be at least 6 characters long" }),
+        .email({ status: false, message: "Invalid email format" }),
+      password: z.string().min(6, {
+        status: false,
+        message: "Password must be at least 6 characters long",
+      }),
     });
 
     const validatedData = userSchema.safeParse(req.body);
