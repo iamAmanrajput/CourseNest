@@ -9,7 +9,10 @@ const Section = () => {
         Gain real-world skills with courses built by professionals.
       </p>
       <div className="flex gap-4 mt-4">
-        <Link className="text-white bg-dark-sapphire py-2 px-6 font-bold rounded-lg shadow-md transition duration-300 hover:bg-blue-900">
+        <Link
+          to="/courses"
+          className="text-white bg-dark-sapphire py-2 px-6 font-bold rounded-lg shadow-md transition duration-300 hover:bg-blue-900"
+        >
           Explore Courses
         </Link>
         <Link className="text-white bg-dark-sapphire py-2 px-6 font-bold rounded-lg shadow-md transition duration-300 hover:bg-blue-900">
