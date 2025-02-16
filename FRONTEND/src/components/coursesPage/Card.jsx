@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Card = (props) => {
-  console.log(props);
   return (
     <div className=" w-full md:w-80 h-96 bg-white p-6 shadow-xl rounded-xl flex flex-col items-center border border-gray-200 hover:shadow-2xl transition-shadow">
       <img

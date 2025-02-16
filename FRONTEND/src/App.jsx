@@ -17,7 +17,7 @@ function App() {
 
         {/* private Routes */}
         <Route path="/courses" element={<Courses />} />
-        <Route path="/buy/courseId" element={<Buy />} />
+        <Route path="/buy/:courseId" element={<Buy />} />
         <Route path="/purchases" element={<Purchases />} />
       </Routes>
     </div>
