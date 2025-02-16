@@ -6,9 +6,10 @@ import Spinner from "../Spinner";
 import { Link } from "react-router-dom";
 
 function PurchaseLayout() {
-  const [purchases, setPurchase] = useState([]);
+  const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const storedUser = localStorage.getItem("user");
   const token = JSON.parse(localStorage.getItem("user")) || null;
 
   useEffect(() => {
@@ -31,12 +32,15 @@ function PurchaseLayout() {
           }
         );
         if (response.data.success) {
-          setPurchase(response.data.purchases);
+          setPurchases(response.data.purchases);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.log("Error in fetched courses");
+        console.error(
+          "Error fetching purchases:",
+          error.response?.data || error.message
+        );
       } finally {
         setLoading(false);
       }
@@ -46,8 +50,10 @@ function PurchaseLayout() {
   }, [token]);
 
   return (
-    <div className="w-screen md:w-[85vw] bg-powder-blue min-h-screen p-8 flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-center mb-6">My Courses</h1>
+    <div className="w-screen md:w-[85vw] bg-gray-100 min-h-screen p-8 flex flex-col items-center">
+      <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+        My Courses
+      </h1>
 
       {loading ? (
         <Spinner />
@@ -66,7 +72,7 @@ function PurchaseLayout() {
           </p>
           <Link
             to="/courses"
-            className="mt-4 inline-block px-6 py-2 text-white bg-blue-300 rounded-lg shadow-md hover:bg-blue-500 transition"
+            className="mt-4 inline-block px-6 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
           >
             Explore Now
           </Link>
@@ -75,25 +81,30 @@ function PurchaseLayout() {
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {purchases.map((purchase) => (
             <div
-              key={purchase.courseId._id}
-              className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center text-center"
+              key={purchase.courseId?._id}
+              className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center text-center transition duration-300 transform hover:scale-105 hover:shadow-xl"
             >
               <img
                 src={
-                  purchase.courseId.image.url ||
+                  purchase.courseId?.image?.url ||
                   "https://via.placeholder.com/150"
                 }
-                alt={purchase.course}
+                alt={purchase.courseId?.title || "Course Image"}
                 className="w-full h-40 object-cover rounded-md"
               />
-              <h2 className="text-xl font-semibold mt-3">
-                {purchase.courseId.title}
+              <h2 className="text-xl font-semibold mt-3 text-gray-800">
+                {purchase.courseId?.title || "Unknown Course"}
               </h2>
-              <p className="text-gray-600 mt-2">
-                {purchase.courseId.description}
+              <p className="text-gray-600 mt-2 px-2 h-[60px] overflow-hidden text-ellipsis">
+                {purchase.courseId?.description?.length > 45
+                  ? `${purchase.courseId.description.substring(0, 45)}....`
+                  : purchase.courseId?.description ||
+                    "No description available"}
               </p>
               <p className="text-lg font-bold text-green-600 mt-2">
-                {purchase.courseId.price}
+                {purchase.courseId?.price
+                  ? `₹${purchase.courseId.price}`
+                  : "Free"}
               </p>
             </div>
           ))}

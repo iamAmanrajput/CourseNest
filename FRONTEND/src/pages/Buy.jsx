@@ -40,6 +40,7 @@ const Buy = () => {
     } catch (error) {
       if (error.response?.status === 400) {
         toast.error("You have already purchased this course");
+        navigate("/purchases");
       } else {
         toast.error("Course purchase failed!");
       }
