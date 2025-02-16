@@ -8,6 +8,7 @@ const {
   getCourses,
   courseDetails,
   buyCourses,
+  verifyPayment,
 } = require("../controllers/course");
 
 const { isLoggedin } = require("../middlewares/auth");
@@ -24,5 +25,7 @@ router.route("/courses").get(getCourses);
 router.route("/:courseId").get(courseDetails);
 
 router.route("/buy/:courseId").post(isLoggedin, buyCourses);
+
+router.route("/verify/:courseId").post(isLoggedin, verifyPayment);
 
 module.exports = router;

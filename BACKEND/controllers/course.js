@@ -2,7 +2,10 @@ const Course = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const Purchase = require("../models/purchase");
+const { createRazorpayInstance } = require("../config/razorpay");
+const razorpayInstance = createRazorpayInstance();
 require("dotenv").config();
+const crypto = require("crypto");
 
 //create course
 exports.createCourse = async (req, res) => {
@@ -187,7 +190,6 @@ exports.courseDetails = async (req, res) => {
 };
 
 //buy course
-
 exports.buyCourses = async (req, res) => {
   try {
     const { userId } = req;
@@ -210,19 +212,72 @@ exports.buyCourses = async (req, res) => {
       });
     }
 
-    // Create a new purchase
-    const newPurchase = await Purchase.create({ userId, courseId });
+    // Create Razorpay Order
+    const options = {
+      amount: course.price * 100, // Convert to paisa
+      currency: "INR",
+      receipt: `receipt_order_${userId}_${courseId}`,
+    };
 
-    // Respond with success message
-    return res.status(201).json({
-      success: true,
-      message: "Course purchased successfully",
-      purchase: newPurchase,
+    razorpayInstance.orders.create(options, (err, order) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Something went wrong while creating the order",
+          error: err.message,
+        });
+      }
+
+      // Send order details to the frontend
+      return res.status(200).json({
+        success: true,
+        message: "Order created successfully",
+        order,
+      });
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: "Something went wrong while buying the course",
+      error: error.message,
+    });
+  }
+};
+
+//verify payment
+exports.verifyPayment = async (req, res) => {
+  try {
+    const { userId } = req;
+    const { courseId } = req.params;
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+
+    // Create HMAC object
+    const hmac = crypto.createHmac("sha256", secret);
+    hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+    const generatedSignature = hmac.digest("hex");
+
+    // Compare generated signature with received signature
+    if (generatedSignature === razorpay_signature) {
+      // Store purchase details after successful payment verification
+      const newPurchase = await Purchase.create({ userId, courseId });
+
+      return res.status(200).json({
+        success: true,
+        message: "Payment Verified Successfully",
+        purchase: newPurchase,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Payment Verification Failed",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong during payment verification",
       error: error.message,
     });
   }
