@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import Courses from "./pages/Courses";
 import Buy from "./pages/Buy";
 import Purchases from "./pages/Purchases";
+import PagenotFound from "./pages/PagenotFound";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/buy/:courseId" element={<Buy />} />
         <Route path="/purchases" element={<Purchases />} />
+
+        <Route path="*" element={<PagenotFound />} />
       </Routes>
     </div>
   );
