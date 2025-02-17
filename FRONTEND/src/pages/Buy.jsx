@@ -8,7 +8,7 @@ const Buy = () => {
   const { courseId } = useParams();
   const [loading, setLoading] = useState(false);
 
-  // Retrieve user data safely
+  // Retrieve user token safely
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
@@ -17,6 +17,21 @@ const Buy = () => {
       navigate("/");
     }
   }, [user, navigate]);
+
+  // Function to dynamically load Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handlePurchase = async () => {
     if (!user) {
@@ -27,7 +42,14 @@ const Buy = () => {
     try {
       setLoading(true);
 
-      // Step 1: Create Order on Backend
+      // Step 1: Load Razorpay script dynamically
+      const razorpayLoaded = await loadRazorpayScript();
+      if (!razorpayLoaded) {
+        toast.error("Failed to load Razorpay. Check your internet connection.");
+        return;
+      }
+
+      // Step 2: Create Order on Backend
       const { data } = await axios.post(
         `http://localhost:4000/api/v1/course/buy/${courseId}`,
         {},
@@ -38,33 +60,44 @@ const Buy = () => {
       );
 
       if (!data.success) {
-        console.log("nhi mila response");
-        toast.error(data.message);
-        return;
-      } else {
-        console.log("mil gya response");
+        throw new Error(data.message || "Failed to create order");
       }
 
+      console.log("Order Response:", data);
       const { order } = data; // Extract order details
 
-      // Step 2: Open Razorpay Payment Window
+      // Step 3: Open Razorpay Payment Window
+      if (!window.Razorpay) {
+        toast.error("Razorpay SDK not loaded. Try again.");
+        return;
+      }
+
       const options = {
-        key: "rzp_test_LwiUk0uIMvjhQP", // Replace with actual API key
+        key: "rzp_test_LwiUk0uIMvjhQP", // Replace with actual Razorpay API Key
         amount: order.amount,
         currency: order.currency,
         name: "CourseNest",
         description: "Purchase Course",
         order_id: order.id,
+        prefill: {
+          email: user?.email || "guest@example.com",
+          contact: user?.phone || "9999999999",
+        },
         handler: async (response) => {
-          // Step 3: Verify Payment on Backend
           try {
+            console.log("Payment Response:", response);
+
+            // Step 4: Verify Payment on Backend
             const verifyRes = await axios.post(
               `http://localhost:4000/api/v1/course/verify/${courseId}`,
               response,
               {
+                withCredentials: true,
                 headers: { Authorization: `Bearer ${user}` },
               }
             );
+
+            console.log("Payment Verification Response:", verifyRes.data);
 
             if (verifyRes.data.success) {
               toast.success("Payment Successful! 🎉");
@@ -73,22 +106,25 @@ const Buy = () => {
               toast.error("Payment Verification Failed");
             }
           } catch (err) {
-            toast.error("Payment verification error!");
+            console.error("Payment verification error:", err);
+            toast.error("Payment verification failed!");
           }
         },
         theme: {
-          color: "#2563eb", // Blue color theme
+          color: "#2563eb",
         },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
 
-      rzp.on("payment.failed", () => {
+      rzp.on("payment.failed", (response) => {
+        console.error("Payment Failed:", response);
         toast.error("Payment Failed! Try Again.");
       });
     } catch (error) {
-      toast.error("Error initiating payment!");
+      console.error("Payment initiation error:", error);
+      toast.error(error.message || "Error initiating payment!");
     } finally {
       setLoading(false);
     }

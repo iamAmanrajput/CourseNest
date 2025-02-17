@@ -2,10 +2,16 @@ const Course = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const Purchase = require("../models/purchase");
-const { createRazorpayInstance } = require("../config/razorpay");
-const razorpayInstance = createRazorpayInstance();
+const Razorpay = require("razorpay");
+// const { createRazorpayInstance } = require("../config/razorpay");
+// const razorpayInstance = createRazorpayInstance();
 require("dotenv").config();
 const crypto = require("crypto");
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 //create course
 exports.createCourse = async (req, res) => {
@@ -189,7 +195,7 @@ exports.courseDetails = async (req, res) => {
   }
 };
 
-//buy course
+// Buy Course
 exports.buyCourses = async (req, res) => {
   try {
     const { userId } = req;
@@ -214,26 +220,19 @@ exports.buyCourses = async (req, res) => {
 
     // Create Razorpay Order
     const options = {
-      amount: course.price * 100, // Convert to paisa
+      amount: course.price * 100,
       currency: "INR",
-      receipt: `receipt_order_${userId}_${courseId}`,
+      receipt: `receipt_order_1`,
     };
 
-    razorpayInstance.orders.create(options, (err, order) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "Something went wrong while creating the order",
-          error: err.message,
-        });
-      }
+    const order = await razorpayInstance.orders.create(options);
+    console.log("order is ", order);
 
-      // Send order details to the frontend
-      return res.status(200).json({
-        success: true,
-        message: "Order created successfully",
-        order,
-      });
+    // Send order details to frontend
+    return res.status(200).json({
+      success: true,
+      message: "Order created successfully",
+      order,
     });
   } catch (error) {
     return res.status(500).json({
