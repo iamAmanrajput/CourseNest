@@ -2,6 +2,7 @@ const Course = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const Purchase = require("../models/purchase");
+const User = require("../models/user");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 const crypto = require("crypto");
@@ -172,7 +173,7 @@ exports.getCourses = async (req, res) => {
 exports.courseDetails = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId).populate("creatorId");
 
     if (!course) {
       return res

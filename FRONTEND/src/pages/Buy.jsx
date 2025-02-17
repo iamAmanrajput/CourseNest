@@ -99,8 +99,8 @@ const Buy = () => {
         key: "rzp_test_LwiUk0uIMvjhQP", // Replace with actual Razorpay API Key
         amount: order.amount,
         currency: order.currency,
-        name: "CourseNest",
-        description: "Purchase Course",
+        name: courseDetail.title,
+        description: courseDetail.description,
         order_id: order.id,
         prefill: {
           email: user?.email || "guest@example.com",
@@ -132,7 +132,7 @@ const Buy = () => {
           }
         },
         theme: {
-          color: "#2563eb",
+          color: "#BBDEFB",
         },
       };
 
