@@ -172,7 +172,7 @@ exports.getCourses = async (req, res) => {
 exports.courseDetails = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const course = await Course.findById(courseId).populate("user");
+    const course = await Course.findById(courseId);
 
     if (!course) {
       return res
@@ -224,7 +224,6 @@ exports.buyCourses = async (req, res) => {
     };
 
     const order = await razorpayInstance.orders.create(options);
-    console.log("order is ", order);
 
     // Send order details to frontend
     return res.status(200).json({

@@ -7,16 +7,39 @@ const Buy = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [courseDetail, setCourseDetail] = useState("");
 
   // Retrieve user token safely
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
-    if (!user) {
-      toast.error("Please Login First To Access This Resource");
-      navigate("/");
-    }
-  }, [user, navigate]);
+    const fetchCourseDetails = async () => {
+      if (!user) {
+        toast.error("Please Login First To Access This Resource");
+        navigate("/");
+      } else {
+        try {
+          const response = await axios.get(
+            `http://localhost:4000/api/v1/course/${courseId}`,
+            { withCredentials: true }
+          );
+
+          if (response.data.success) {
+            setCourseDetail(response.data.course);
+          } else {
+            toast.error(
+              response.data.message || "Failed to load course details."
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching course details:", error);
+          toast.error("Failed to load course details. Please try again.");
+        }
+      }
+    };
+
+    fetchCourseDetails();
+  }, [user, navigate, courseId]);
 
   // Function to dynamically load Razorpay script
   const loadRazorpayScript = () => {
@@ -45,7 +68,7 @@ const Buy = () => {
       // Step 1: Load Razorpay script dynamically
       const razorpayLoaded = await loadRazorpayScript();
       if (!razorpayLoaded) {
-        toast.error("Failed to load Razorpay. Check your internet connection.");
+        toast.error("Failed to load Razorpay. Please try again later.");
         return;
       }
 
@@ -60,15 +83,15 @@ const Buy = () => {
       );
 
       if (!data.success) {
-        throw new Error(data.message || "Failed to create order");
+        toast.error(data.message || "Error creating order. Please try again.");
+        return;
       }
 
-      console.log("Order Response:", data);
       const { order } = data; // Extract order details
 
       // Step 3: Open Razorpay Payment Window
       if (!window.Razorpay) {
-        toast.error("Razorpay SDK not loaded. Try again.");
+        toast.error("Razorpay SDK not loaded. Please try again.");
         return;
       }
 
@@ -97,17 +120,15 @@ const Buy = () => {
               }
             );
 
-            console.log("Payment Verification Response:", verifyRes.data);
-
             if (verifyRes.data.success) {
               toast.success("Payment Successful! 🎉");
               navigate("/purchases");
             } else {
-              toast.error("Payment Verification Failed");
+              toast.error("Payment Verification Failed. Please try again.");
             }
           } catch (err) {
             console.error("Payment verification error:", err);
-            toast.error("Payment verification failed!");
+            toast.error("Payment verification failed. Please try again.");
           }
         },
         theme: {
@@ -123,25 +144,45 @@ const Buy = () => {
         toast.error("Payment Failed! Try Again.");
       });
     } catch (error) {
-      console.error("Payment initiation error:", error);
-      toast.error(error.message || "Error initiating payment!");
+      console.error("Error initiating payment:", error);
+      toast.error("You Have Already Purchased this Course");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-6 text-center w-96">
-        <h2 className="text-xl font-semibold mb-4">Purchase Course</h2>
-        <p className="text-gray-600 mb-6">Get access to this course now!</p>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-powder-blue to-pure-white p-6">
+      <div className="bg-white bg-opacity-90 backdrop-blur-md shadow-2xl rounded-2xl p-8 max-w-md text-center border border-gray-200 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-3xl">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Unlock Your Course! 🚀
+        </h2>
+        <p className="text-gray-600 mb-6 text-lg">
+          Get instant access and start learning today.
+        </p>
+
+        <div className="relative w-full flex flex-col items-center">
+          <img
+            src={courseDetail?.image?.url || "https://via.placeholder.com/300"}
+            alt="Course Preview"
+            className="w-full h-48 object-cover rounded-lg shadow-md"
+          />
+          <h3 className="mt-4 text-lg font-semibold text-gray-800">
+            {courseDetail?.title || "Course Title"}
+          </h3>
+        </div>
+
         <button
-          className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition duration-300 disabled:bg-gray-400"
+          className="mt-6 w-full bg-blue-400 text-white py-3 px-6 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-600 transition-all duration-300 ease-in-out transform hover:scale-105 disabled:bg-gray-400"
           onClick={handlePurchase}
           disabled={loading}
         >
           {loading ? "Processing..." : "Buy Now"}
         </button>
+
+        <p className="text-sm text-gray-500 mt-4">
+          Secure Payment via <span className="font-semibold">Razorpay</span>.
+        </p>
       </div>
     </div>
   );
