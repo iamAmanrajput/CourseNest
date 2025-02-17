@@ -3,8 +3,6 @@ const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const Purchase = require("../models/purchase");
 const Razorpay = require("razorpay");
-// const { createRazorpayInstance } = require("../config/razorpay");
-// const razorpayInstance = createRazorpayInstance();
 require("dotenv").config();
 const crypto = require("crypto");
 
