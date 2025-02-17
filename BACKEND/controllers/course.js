@@ -3,6 +3,7 @@ const cloudinary = require("cloudinary").v2;
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const Purchase = require("../models/purchase");
 const User = require("../models/user");
+const Order = require("../models/order");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 const crypto = require("crypto");
@@ -250,6 +251,9 @@ exports.verifyPayment = async (req, res) => {
       req.body;
     const secret = process.env.RAZORPAY_KEY_SECRET;
 
+    const user = await User.findById(userId);
+    const course = await Course.findById(courseId);
+
     // Create HMAC object
     const hmac = crypto.createHmac("sha256", secret);
     hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
@@ -259,6 +263,14 @@ exports.verifyPayment = async (req, res) => {
     if (generatedSignature === razorpay_signature) {
       // Store purchase details after successful payment verification
       const newPurchase = await Purchase.create({ userId, courseId });
+      const orderDetail = await Order.create({
+        email: user.email,
+        userId,
+        courseId,
+        paymentId: razorpay_payment_id,
+        amount: course.price,
+        status: "Success",
+      });
 
       return res.status(200).json({
         success: true,

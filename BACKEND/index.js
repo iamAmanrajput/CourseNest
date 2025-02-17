@@ -36,6 +36,8 @@ app.use(
 app.use("/api/v1/course", require("./routes/course"));
 app.use("/api/v1/user", require("./routes/user"));
 
+app.use("/api/v1/order", require("./routes/order"));
+
 //admin routes
 app.use("/api/v1/admin", require("./routes/admin"));
 
