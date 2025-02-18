@@ -1,7 +1,7 @@
 import React from "react";
 
 const UpdateCourse = () => {
-  return <div>UpdateCourse</div>;
+  return <div>this is updateCourse Route UpdateCourse</div>;
 };
 
 export default UpdateCourse;
