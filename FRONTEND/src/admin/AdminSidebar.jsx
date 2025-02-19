@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../../assets/Logo.png";
+import logo from "../assets/Logo.png";
 import { Link } from "react-router-dom";
 import { FaHome, FaBars, FaTimes } from "react-icons/fa";
 import { SiBookstack } from "react-icons/si";
@@ -10,14 +10,14 @@ import toast from "react-hot-toast";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-function Sidebar() {
+function AdminSidebar() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
+    const admin = localStorage.getItem("admin");
+    if (!admin) {
       setIsLoggedIn(false);
     }
   }, []);
@@ -25,16 +25,16 @@ function Sidebar() {
   const handleLogout = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/v1/user/logout",
+        "http://localhost:4000/api/v1/admin/logout",
         { withCredentials: true }
       );
 
       if (response.data.success) {
         toast.success("Logout Successfully");
         setIsLoggedIn(false);
-        localStorage.removeItem("user");
+        localStorage.removeItem("admin");
         window.location.reload();
-        navigate("/");
+        navigate("/admin/login");
       } else {
         toast.error(response.data.message);
       }
@@ -79,14 +79,11 @@ function Sidebar() {
 
         {/* Sidebar Links */}
         <div className="space-y-4">
-          <Link to="/" className="flex items-center gap-2">
-            <FaHome /> <p>Home</p>
-          </Link>
-          <Link to="/courses" className="flex items-center gap-2">
-            <SiBookstack /> <p>Courses</p>
+          <Link to="/admin/my-courses" className="flex items-center gap-2">
+            <SiBookstack /> <p>My Courses</p>
           </Link>
           <Link to="/purchases" className="flex items-center gap-2">
-            <FaCloudDownloadAlt /> <p>Purchases</p>
+            <FaCloudDownloadAlt /> <p>create Course</p>
           </Link>
           <Link to="/settings" className="flex items-center gap-2">
             <IoMdSettings /> <p>Settings</p>
@@ -109,4 +106,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default AdminSidebar;
