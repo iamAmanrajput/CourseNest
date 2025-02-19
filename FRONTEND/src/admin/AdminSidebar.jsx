@@ -3,8 +3,7 @@ import logo from "../assets/Logo.png";
 import { Link } from "react-router-dom";
 import { FaHome, FaBars, FaTimes } from "react-icons/fa";
 import { SiBookstack } from "react-icons/si";
-import { FaCloudDownloadAlt } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
+import { IoIosCreate } from "react-icons/io";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
@@ -47,57 +46,81 @@ function AdminSidebar() {
 
   return (
     <>
-      {/* Hamburger Button (Visible only on small screens) */}
+      {/* Hamburger Button for Mobile */}
       <button
-        className="md:hidden fixed top-2 right-4 z-[100] p-4 text-xl bg-powder-blue rounded-full shadow-lg"
+        className="md:hidden fixed top-4 right-4 z-[100] p-3 text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition-all"
         onClick={() => setIsSidebarOpen(true)}
       >
-        <FaBars />
+        <FaBars className="text-2xl" />
       </button>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-100 p-6 w-[75vw] md:w-[15vw] md:relative md:translate-x-0 shadow-lg z-[100] ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out md:transition-none`}
+        className={`fixed top-0 left-0 h-full bg-gray-100 p-4 w-[75vw] sm:w-[60vw] md:w-[18vw] lg:w-[18vw] shadow-xl z-[100] 
+      transition-transform duration-300 ease-in-out ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0 md:relative`}
       >
-        {/* Close Button (Only visible on small screens) */}
+        {/* Close Button for Mobile */}
         <button
-          className="absolute top-4 right-4 md:hidden text-xl"
+          className="absolute top-4 right-4 md:hidden text-gray-600 hover:text-red-500 transition-all"
           onClick={() => setIsSidebarOpen(false)}
         >
-          <FaTimes />
+          <FaTimes className="text-2xl" />
         </button>
 
         {/* Logo */}
         <Link
-          to="/"
-          className="w-12 h-12 flex justify-center items-center rounded-full mb-12"
+          to="/admin/dashboard"
+          className="flex justify-center items-center mb-10"
         >
-          <img src={logo} alt="logo" className="w-8 h-8" />
+          <img
+            src={logo}
+            alt="logo"
+            className="w-12 h-12 rounded-full shadow-md"
+          />
         </Link>
+
+        {/* Admin Text */}
+        <h1 className="text-xl font-bold text-gray-700 text-center mb-6">
+          I'm Admin
+        </h1>
 
         {/* Sidebar Links */}
         <div className="space-y-4">
-          <Link to="/admin/my-courses" className="flex items-center gap-2">
-            <SiBookstack /> <p>My Courses</p>
+          <Link
+            to="/admin/my-courses"
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-100 transition-all"
+          >
+            <SiBookstack className="text-blue-500" /> <p>My Courses</p>
           </Link>
-          <Link to="/purchases" className="flex items-center gap-2">
-            <FaCloudDownloadAlt /> <p>create Course</p>
+          <Link
+            to="/purchases"
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-100 transition-all"
+          >
+            <IoIosCreate className="text-green-500" /> <p>Create Course</p>
           </Link>
-          <Link to="/settings" className="flex items-center gap-2">
-            <IoMdSettings /> <p>Settings</p>
+          <Link
+            to="/settings"
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-100 transition-all"
+          >
+            <FaHome className="text-purple-500" /> <p>Home</p>
           </Link>
+
+          {/* Login/Logout Button */}
           {isLoggedIn ? (
             <div
               onClick={handleLogout}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-100 transition-all"
             >
-              <IoLogOut /> <p>Logout</p>
+              <IoLogOut className="text-red-500" /> <p>Logout</p>
             </div>
           ) : (
-            <Link to="/login" className="flex items-center gap-2">
-              <IoLogIn /> <p>Login</p>
+            <Link
+              to="/login"
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-yellow-100 transition-all"
+            >
+              <IoLogIn className="text-yellow-500" /> <p>Login</p>
             </Link>
           )}
         </div>
