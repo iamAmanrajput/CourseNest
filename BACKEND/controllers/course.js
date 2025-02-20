@@ -66,7 +66,7 @@ exports.updateCourse = async (req, res) => {
     if (!course) {
       return res
         .status(404)
-        .json({ success: false, message: "Course Not Found" });
+        .json({ success: false, message: "You are not owner of this course" });
     }
 
     const updatedCourseDetails = {
