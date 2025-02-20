@@ -64,6 +64,11 @@ const CourseCreate = () => {
 
       if (response.data.success) {
         toast.success("Course created successfully!");
+        setTitle("");
+        setDescription("");
+        setImage("");
+        setPreview("");
+        setPrice("");
         navigate("/admin/our-courses");
       } else {
         toast.error(response.data.message);
