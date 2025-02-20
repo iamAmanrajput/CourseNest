@@ -1,32 +1,36 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
-import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(() =>
+    Boolean(localStorage.getItem("user"))
+  ); // ✅ Optimized
+
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    const user = JSON.parse(localStorage.getItem("user"));
+    setIsLoggedIn(Boolean(user)); // ✅ More efficient
   }, []);
+
   const handleLogout = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/logout`,
-        { withCredentials: true }
-      );
+      const API_URL = import.meta.env.VITE_API_URL;
+      if (!API_URL) {
+        throw new Error("VITE_API_URL is not defined in .env");
+      }
+
+      const response = await axios.get(`${API_URL}/user/logout`, {
+        withCredentials: true,
+      });
 
       if (response.data.success) {
         toast.success("Logout Successfully");
-        setIsLoggedIn(false);
+        setIsLoggedIn(false); // ✅ Ensure UI updates immediately
         localStorage.removeItem("user");
-        window.location.reload();
+        navigate("/");
       } else {
         toast.error(response.data.message);
       }
@@ -38,13 +42,14 @@ const Header = () => {
   };
 
   return (
-    <header className="h-24 flex justify-between items-center text-charcoal-gray">
+    <header className="h-24 flex justify-between items-center text-charcoal-gray px-6">
       {/* Logo Section */}
       <Link to="/" className="flex items-center">
         <img src={Logo} alt="logo" className="h-12 w-auto mr-2" />
         <p className="font-bold text-dark-sapphire text-2xl">CourseNest</p>
       </Link>
 
+      {/* Navigation Buttons */}
       <div className="flex gap-4">
         {isLoggedIn ? (
           <button
