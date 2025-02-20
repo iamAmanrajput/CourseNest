@@ -25,7 +25,7 @@ function PurchaseLayout() {
     const fetchPurchases = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/user/purchases",
+          `${import.meta.env.VITE_API_URL}/user/purchases`,
           {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,

@@ -30,7 +30,7 @@ const UpdateCourse = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:4000/api/v1/course/${courseId}`,
+          `${import.meta.env.VITE_API_URL}/course/${courseId}`,
           { withCredentials: true }
         );
 

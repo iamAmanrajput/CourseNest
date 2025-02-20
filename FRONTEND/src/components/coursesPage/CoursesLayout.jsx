@@ -12,7 +12,7 @@ const CoursesLayout = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/course/courses",
+          `${import.meta.env.VITE_API_URL}/course/courses`,
           { withCredentials: true }
         );
         setCourses(response.data.courses);

@@ -23,7 +23,7 @@ function Signup() {
     setError(""); // Reset error before making the request
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/user/signup",
+        `${import.meta.env.VITE_API_URL}/user/signup`,
         formData,
         {
           withCredentials: true,

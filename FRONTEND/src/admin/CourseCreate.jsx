@@ -51,7 +51,7 @@ const CourseCreate = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:4000/api/v1/course/create",
+        `${import.meta.env.VITE_API_URL}/course/create`,
         formData,
         {
           headers: {

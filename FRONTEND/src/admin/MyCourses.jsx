@@ -25,7 +25,7 @@ const MyCourses = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/course/courses",
+          `${import.meta.env.VITE_API_URL}/course/courses`,
           { withCredentials: true }
         );
         if (response.data.success) {
@@ -51,7 +51,7 @@ const MyCourses = () => {
       toast.success("processing...");
 
       const response = await axios.delete(
-        `http://localhost:4000/api/v1/course/delete/${courseId}`,
+        `${import.meta.env.VITE_API_URL}/course/delete/${courseId}`,
         {
           headers: {
             Authorization: `Bearer ${admin}`,

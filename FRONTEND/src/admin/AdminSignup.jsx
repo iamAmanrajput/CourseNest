@@ -23,7 +23,7 @@ function AdminSignup() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/admin/signup",
+        `${import.meta.env.VITE_API_URL}/admin/signup`,
         formData,
         {
           withCredentials: true,

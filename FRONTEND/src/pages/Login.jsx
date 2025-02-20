@@ -21,7 +21,7 @@ function Login() {
     setError(""); // Reset previous error before new request
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/user/login",
+        `${import.meta.env.VITE_API_URL}/user/login`,
         formData,
         {
           withCredentials: true,

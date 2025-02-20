@@ -21,7 +21,7 @@ function AdminLogin() {
     setError(""); // Reset previous error before new request
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/admin/login",
+        `${import.meta.env.VITE_API_URL}/admin/login`,
         formData,
         {
           withCredentials: true,

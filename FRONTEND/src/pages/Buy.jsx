@@ -20,7 +20,7 @@ const Buy = () => {
       } else {
         try {
           const response = await axios.get(
-            `http://localhost:4000/api/v1/course/${courseId}`,
+            `${import.meta.env.VITE_API_URL}/course/${courseId}`,
             { withCredentials: true }
           );
 
@@ -74,7 +74,7 @@ const Buy = () => {
 
       // Step 2: Create Order on Backend
       const { data } = await axios.post(
-        `http://localhost:4000/api/v1/course/buy/${courseId}`,
+        `${import.meta.env.VITE_API_URL}/course/buy/${courseId}`,
         {},
         {
           withCredentials: true,
@@ -96,7 +96,7 @@ const Buy = () => {
       }
 
       const options = {
-        key: "rzp_test_LwiUk0uIMvjhQP", // Replace with actual Razorpay API Key
+        key: import.meta.env.VITE_RAZORPAY_API_KEY, // Replace with actual Razorpay API Key
         amount: order.amount,
         currency: order.currency,
         name: courseDetail.title,
@@ -108,11 +108,9 @@ const Buy = () => {
         },
         handler: async (response) => {
           try {
-            console.log("Payment Response:", response);
-
             // Step 4: Verify Payment on Backend
             const verifyRes = await axios.post(
-              `http://localhost:4000/api/v1/course/verify/${courseId}`,
+              `${import.meta.env.VITE_API_URL}/course/verify/${courseId}`,
               response,
               {
                 withCredentials: true,
