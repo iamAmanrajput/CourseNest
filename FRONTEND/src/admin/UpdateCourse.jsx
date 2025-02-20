@@ -86,7 +86,7 @@ const UpdateCourse = () => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:4000/api/v1/course/update/${courseId}`,
+        `${import.meta.env.VITE_API_URL}/course/update/${courseId}`,
         formData,
         {
           headers: {
