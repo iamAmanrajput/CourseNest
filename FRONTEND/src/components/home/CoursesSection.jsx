@@ -4,9 +4,11 @@ import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Spinner from "../Spinner";
 
 function CoursesSection() {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -15,12 +17,17 @@ function CoursesSection() {
           `${import.meta.env.VITE_API_URL}/course/courses`,
           { withCredentials: true }
         );
-        setCourses(response.data.courses);
+        if (response.data.success) {
+          setCourses(response.data.courses);
+          setLoading(false);
+        }
       } catch (error) {
         console.error(
           "Error fetching courses:",
           error.response?.data || error.message
         );
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -96,6 +103,10 @@ function CoursesSection() {
             </div>
           ))}
         </Slider>
+      ) : loading ? (
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
       ) : (
         <p className="text-center text-3xl font-semibold text-gray-500 mt-10">
           No courses found
