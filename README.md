@@ -15,7 +15,7 @@ CourseNest is a full-stack web application that allows instructors to create and
 ✅ **Admin Panel** – Create, update, delete, and manage courses  
 ✅ **User Dashboard** – Track enrolled courses  
 ✅ **Secure Payments** – Transactions via Razorpay  
-✅ **Course Management** – Categories, pricing, and descriptions  
+✅ **Course Management** – pricing, and descriptions  
 ✅ **Authentication & Authorization** – Secure login/signup using JWT  
 
 ## 📸 Screenshots  
@@ -44,15 +44,6 @@ npm install
 npm run dev
 ```
 
-4️⃣ **Environment Variables Setup**  
-Create a `.env` file in both backend and frontend directories and add the required credentials:
-```
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-RAZORPAY_KEY_ID=your_key_id
-RAZORPAY_KEY_SECRET=your_key_secret
-```
-
 ## 💳 Payment Integration (Razorpay)  
 - Admins can set course prices  
 - Users can purchase courses via Razorpay  
@@ -62,7 +53,7 @@ RAZORPAY_KEY_SECRET=your_key_secret
 Feel free to fork this repository and contribute!  
 
 ## 📄 License  
-This project is **MIT Licensed**.  
+This project is **AMAN SINGH Licensed**.  
 
 If you like this project, don't forget to ⭐ star it!  
 
