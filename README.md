@@ -5,7 +5,7 @@ _A MERN Stack Course Selling & Buying Platform with Razorpay Integration_
 CourseNest is a full-stack web application that allows instructors to create and sell courses, while students can purchase and access them. It includes Razorpay payment gateway integration for seamless transactions.
 
 ## 🛠️ Tech Stack  
-- **Frontend:** React.js (Vite)  
+- **Frontend:** React.js (Vite), Tailwind CSS  
 - **Backend:** Node.js, Express.js  
 - **Database:** MongoDB  
 - **Authentication:** JWT (JSON Web Tokens)  
@@ -19,7 +19,8 @@ CourseNest is a full-stack web application that allows instructors to create and
 ✅ **Authentication & Authorization** – Secure login/signup using JWT  
 
 ## 📸 Screenshots  
-_(Add screenshots of your app here to make it visually appealing)_  
+<img width="947" alt="image" src="https://github.com/user-attachments/assets/42ae288f-7298-49aa-a297-3ddb0bc03afd" />
+ 
 
 ## 🔧 Installation & Setup  
 
