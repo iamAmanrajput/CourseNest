@@ -89,10 +89,10 @@ function AdminSidebar() {
         {/* Sidebar Links */}
         <div className="space-y-4">
           <Link
-            to="/admin/my-courses"
+            to="/admin/our-courses"
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-100 transition-all"
           >
-            <SiBookstack className="text-blue-500" /> <p>My Courses</p>
+            <SiBookstack className="text-blue-500" /> <p>Our Courses</p>
           </Link>
           <Link
             to="/purchases"

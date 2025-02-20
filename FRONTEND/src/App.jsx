@@ -36,7 +36,7 @@ function App() {
           path="/admin/update-course/:courseId"
           element={<UpdateCourse />}
         />
-        <Route path="/admin/my-courses" element={<MyCourses />} />
+        <Route path="/admin/our-courses" element={<MyCourses />} />
 
         <Route path="*" element={<PagenotFound />} />
       </Routes>

@@ -125,9 +125,10 @@ exports.deleteCourse = async (req, res) => {
     });
 
     if (!course) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Course Not Found" });
+      return res.status(404).json({
+        success: false,
+        message: "You are not the owner of this cousre",
+      });
     }
 
     if (course.image && course.image.public_id) {

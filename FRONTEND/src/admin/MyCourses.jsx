@@ -9,14 +9,17 @@ const MyCourses = () => {
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [admin, setAdmin] = useState("");
 
   useEffect(() => {
     const admin = JSON.parse(localStorage.getItem("admin"));
     if (!admin) {
       toast.error("Please Login First to Access This Resource");
       navigate("/admin/login");
+    } else {
+      setAdmin(admin);
     }
-  }, [navigate]);
+  }, [admin, navigate]);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -42,11 +45,39 @@ const MyCourses = () => {
   }, []);
 
   // handle delete function
-  const handleDelete = async () => {
+  const handleDelete = async (courseId) => {
     try {
       setDeleteLoading(true);
-      const response = await axios.get();
-    } catch (error) {}
+      toast.success("processing...");
+
+      const response = await axios.delete(
+        `http://localhost:4000/api/v1/course/delete/${courseId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${admin}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.data.success) {
+        toast.success("Course deleted successfully");
+        // Remove the deleted course from the UI
+        setCourses((prevCourses) =>
+          prevCourses.filter((course) => course._id !== courseId)
+        );
+      } else {
+        toast.error(response.data.message || "Failed to delete course");
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while deleting the course"
+      );
+      console.error("Delete error:", error);
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   return (
@@ -107,7 +138,7 @@ const MyCourses = () => {
                     Update
                   </button>
                   <button
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(course._id)}
                     className="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md
                     hover:bg-red-600 hover:shadow-lg transition active:scale-95"
                   >
