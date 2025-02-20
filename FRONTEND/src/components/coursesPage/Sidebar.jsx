@@ -33,8 +33,8 @@ function Sidebar() {
         toast.success("Logout Successfully");
         setIsLoggedIn(false);
         localStorage.removeItem("user");
-        window.location.reload();
         navigate("/");
+        window.location.reload();
       } else {
         toast.error(response.data.message);
       }
