@@ -95,13 +95,13 @@ function AdminSidebar() {
             <SiBookstack className="text-blue-500" /> <p>Our Courses</p>
           </Link>
           <Link
-            to="/purchases"
+            to="/admin/create-course"
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-100 transition-all"
           >
             <IoIosCreate className="text-green-500" /> <p>Create Course</p>
           </Link>
           <Link
-            to="/settings"
+            to="/"
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-100 transition-all"
           >
             <FaHome className="text-purple-500" /> <p>Home</p>
@@ -117,7 +117,7 @@ function AdminSidebar() {
             </div>
           ) : (
             <Link
-              to="/login"
+              to="/admin/login"
               className="flex items-center gap-3 p-3 rounded-lg hover:bg-yellow-100 transition-all"
             >
               <IoLogIn className="text-yellow-500" /> <p>Login</p>
