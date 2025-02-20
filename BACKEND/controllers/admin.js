@@ -119,11 +119,6 @@ exports.login = async (req, res) => {
 
 exports.logout = (req, res) => {
   try {
-    if (!req.cookies.jwt) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Kindly Login First" });
-    }
     res.clearCookie("jwt", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
