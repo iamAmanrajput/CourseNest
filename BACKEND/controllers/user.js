@@ -103,10 +103,10 @@ exports.login = async (req, res) => {
     });
 
     const cookieOptions = {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production", // ❌ secure: true blocks cookies on localhost
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax", // ✅ Fix for localhost
     };
 
     res.cookie("jwt", token, cookieOptions).status(200).json({
