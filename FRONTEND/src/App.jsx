@@ -13,6 +13,7 @@ import Dashboard from "./admin/Dashboard";
 import CourseCreate from "./admin/CourseCreate";
 import UpdateCourse from "./admin/UpdateCourse";
 import MyCourses from "./admin/MyCourses";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/courses" element={<Courses />} />
         <Route path="/buy/:courseId" element={<Buy />} />
         <Route path="/purchases" element={<Purchases />} />
+        <Route path="/settings" element={<Settings />} />
 
         {/* Admin routes */}
         <Route path="/admin/signup" element={<AdminSignup />} />
