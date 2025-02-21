@@ -19,7 +19,6 @@ function CoursesSection() {
         );
         if (response.data.success) {
           setCourses(response.data.courses);
-          setLoading(false);
         }
       } catch (error) {
         console.error(
@@ -36,16 +35,16 @@ function CoursesSection() {
 
   var settings = {
     dots: true,
-    infinite: true, // 🔹 Loop enable taaki end pe rukega nahi
+    infinite: true,
     speed: 500,
-    autoplay: true, // 🔹 Autoplay enable
-    autoplaySpeed: 2000, // 🔹 3 seconds per slide
+    autoplay: true,
+    autoplaySpeed: 3000,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: true, // 🔹 Arrows rakh rahe hain
+    arrows: true,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1280,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -54,16 +53,25 @@ function CoursesSection() {
         },
       },
       {
-        breakpoint: 768, // 🔹 Tablet aur mobile ke liye
+        breakpoint: 1024,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
           dots: true,
-          arrows: false, // 🔹 Mobile par arrows hata diye
+          arrows: false,
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          dots: true,
+          arrows: false,
+        },
+      },
+      {
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -75,25 +83,29 @@ function CoursesSection() {
   };
 
   return (
-    <div className="mt-8 mb-8 ml-8">
-      {courses.length > 0 ? ( // ✅ Syntax Fix
+    <div className="mt-8 mb-8 px-4">
+      {loading ? (
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
+      ) : courses.length > 0 ? (
         <Slider {...settings}>
           {courses.map((course) => (
             <div key={course._id} className="px-2">
-              <div className="relative flex-shrink-0 md:w-80 w-92 transition-transform duration-300 transform hover:scale-105">
-                <div className="border-2 bg-powder-blue border-powder-blue rounded-lg overflow-hidden p-4">
+              <div className="relative flex-shrink-0 w-full transition-transform duration-300 transform hover:scale-105">
+                <div className="border-2 bg-white border-gray-300 rounded-lg overflow-hidden p-4 shadow-lg bg-gradient-to-r from-powder-blue to-dark-sapphire">
                   <img
-                    className="h-32 w-full object-contain"
+                    className="h-40 w-full object-cover rounded-md"
                     src={course.image?.url}
                     alt={course.title}
                   />
                   <div className="p-4 text-center">
-                    <h2 className="text-lg font-bold text-dark-sapphire mb-2">
+                    <h2 className="text-lg font-bold text-white mb-2">
                       {course.title}
                     </h2>
                     <Link
                       to={`/buy/${course._id}`}
-                      className="bg-golden-yellow text-dark-sapphire font-bold py-2 px-4 rounded-lg hover:bg-yellow-500 duration-300 shadow-md"
+                      className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 duration-300 shadow-md"
                     >
                       Enroll Now
                     </Link>
@@ -103,12 +115,8 @@ function CoursesSection() {
             </div>
           ))}
         </Slider>
-      ) : loading ? (
-        <div className="flex justify-center">
-          <Spinner />
-        </div>
       ) : (
-        <p className="text-center text-3xl font-semibold text-gray-500 mt-10">
+        <p className="text-center text-2xl font-semibold text-gray-500 mt-10">
           No courses found
         </p>
       )}
