@@ -95,7 +95,7 @@ function PurchaseLayout() {
               <h2 className="text-xl font-semibold mt-3 text-gray-800">
                 {purchase.courseId?.title || "Unknown Course"}
               </h2>
-              <p className="text-gray-600 mt-2 px-2 h-[60px] overflow-hidden text-ellipsis">
+              <p className="text-gray-600 mt-2  h-[60px] overflow-hidden text-ellipsis">
                 {purchase.courseId?.description?.length > 45
                   ? `${purchase.courseId.description.substring(0, 45)}....`
                   : purchase.courseId?.description ||

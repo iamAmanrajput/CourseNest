@@ -49,7 +49,7 @@ function Sidebar() {
     <>
       {/* Hamburger Button (Visible only on small screens) */}
       <button
-        className="md:hidden fixed top-2 right-4 z-[100] p-4 text-xl bg-powder-blue rounded-full shadow-lg"
+        className="md:hidden fixed top-2 left-4 z-[100] p-4 text-xl bg-powder-blue rounded-full shadow-lg"
         onClick={() => setIsSidebarOpen(true)}
       >
         <FaBars />

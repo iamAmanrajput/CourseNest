@@ -51,15 +51,15 @@ function Login() {
   return (
     <div className="w-screen h-screen flex flex-col md:flex-row">
       {/* Left Section */}
-      <div className="w-full md:w-[50vw] h-[40vh] md:h-screen bg-blue-400 text-white flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-center">
+      <div className="w-full md:w-[50vw] min-h-[40vh] md:h-screen bg-blue-400 text-white flex flex-col items-center justify-center px-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-center">
           Welcome To CourseNest
         </h1>
       </div>
 
       {/* Right Section */}
-      <div className="w-full md:w-[50vw] h-[60vh] md:h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white p-10 rounded-xl shadow-lg w-full max-w-md">
+      <div className="w-full md:w-[50vw] min-h-[60vh] md:h-screen bg-gray-100 flex items-center justify-center px-6">
+        <div className="bg-white p-8 md:p-10 rounded-xl shadow-lg w-full max-w-md">
           <h1 className="text-2xl font-bold text-center">
             Log in To Your Account
           </h1>
@@ -90,7 +90,7 @@ function Login() {
                 onChange={handleChange}
                 name="email"
                 placeholder="You@example.com"
-                className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mt-1 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4 relative">
@@ -109,7 +109,7 @@ function Login() {
                   required
                   onChange={handleChange}
                   name="password"
-                  className="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full mt-1 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span
                   onClick={() => setShowPassword(!showPassword)}
@@ -127,7 +127,7 @@ function Login() {
               </p>
             )}
 
-            <button className="w-full bg-blue-400 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition-all">
+            <button className="w-full bg-blue-400 text-white py-2 rounded-lg font-semibold text-sm hover:bg-blue-600 transition-all">
               Log In
             </button>
           </form>
