@@ -38,7 +38,7 @@ function CoursesSection() {
     infinite: true,
     speed: 500,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2000,
     slidesToShow: 3,
     slidesToScroll: 1,
     arrows: true,
@@ -50,6 +50,7 @@ function CoursesSection() {
           slidesToScroll: 1,
           dots: true,
           infinite: true,
+          arrows: true,
         },
       },
       {
@@ -58,7 +59,7 @@ function CoursesSection() {
           slidesToShow: 2,
           slidesToScroll: 1,
           dots: true,
-          arrows: false,
+          arrows: true,
         },
       },
       {
@@ -93,9 +94,14 @@ function CoursesSection() {
           {courses.map((course) => (
             <div key={course._id} className="px-2">
               <div className="relative flex-shrink-0 w-full transition-transform duration-300 transform hover:scale-105">
-                <div className="border-2 bg-white border-gray-300 rounded-lg overflow-hidden p-4 shadow-lg bg-gradient-to-r from-powder-blue to-dark-sapphire">
+                <div className="border-2 bg-white border-gray-300 rounded-lg overflow-hidden p-4 shadow-lg bg-gradient-to-r from-powder-blue to-blue-300">
                   <img
                     className="h-40 w-full object-cover rounded-md"
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
                     src={course.image?.url}
                     alt={course.title}
                   />
@@ -105,7 +111,7 @@ function CoursesSection() {
                     </h2>
                     <Link
                       to={`/buy/${course._id}`}
-                      className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 duration-300 shadow-md"
+                      className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-dark-sapphire duration-300 shadow-md"
                     >
                       Enroll Now
                     </Link>

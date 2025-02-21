@@ -7,38 +7,53 @@ import Logo from "../../assets/Logo.png";
 
 const Footer = () => {
   return (
-    <footer className="flex justify-between h-40 items-center border-t-powder-blue border-t-2 rounded-2xl">
-      <div>
+    <footer className="flex flex-col md:flex-row items-center justify-between gap-6 px-6 py-8 border-t-2 border-powder-blue rounded-2xl text-gray-700">
+      {/* Logo & Branding */}
+      <div className="flex flex-col items-center md:items-start text-center md:text-left ">
         <Link to="/" className="flex items-center">
           <img src={Logo} alt="logo" className="h-12 w-auto mr-2" />
           <p className="font-bold text-dark-sapphire text-2xl">CourseNest</p>
         </Link>
-        <p className="font-light text-[0.8rem] mt-2">Copyright &copy; 2025</p>
+        <p className="text-sm mt-2">
+          &copy; 2025 CourseNest. All Rights Reserved.
+        </p>
         <p className="font-semibold mt-2">
-          Made with <span className="text-red-600 text-xl">&hearts;</span> By{" "}
+          Made with <span className="text-red-600 text-xl">&hearts;</span> by{" "}
           <span className="font-bold text-dark-sapphire">Aman Singh</span>
         </p>
       </div>
+      <div className="border-b-2 border-powder-blue h-1 w-full md:hidden"></div>
 
-      <div>
-        <p>Terms & Conditions</p>
-        <p>Privacy Policy</p>
-        <p>Refund & Cancellation</p>
+      {/* Legal Links */}
+      <div className="flex flex-col items-center md:items-start text-center md:text-left gap-2 ">
+        <Link to="#" className="hover:underline">
+          Terms & Conditions
+        </Link>
+        <Link to="#" className="hover:underline">
+          Privacy Policy
+        </Link>
+        <Link to="#" className="hover:underline">
+          Refund & Cancellation
+        </Link>
       </div>
+      <div className="border-b-2 border-powder-blue h-1 w-full md:hidden"></div>
 
-      {/* Social Links - Hidden on Mobile */}
-      <div className="hidden md:block">
+      {/* Social Links */}
+      <div className="flex flex-col items-center md:items-start gap-2">
         <Link
           to="https://github.com/iamAmanrajput"
-          className="flex items-center gap-1"
+          className="flex items-center gap-2 hover:text-blue-500 transition"
         >
-          <FaGithub /> iamAmanrajput
+          <FaGithub className="text-xl" /> iamAmanrajput
         </Link>
-        <p className="flex items-center gap-1">
-          <MdOutlineEmail /> Aman.it360@gmail.com
+        <p className="flex items-center gap-2">
+          <MdOutlineEmail className="text-xl" /> Aman.it360@gmail.com
         </p>
-        <Link to="/" className="flex items-center gap-1">
-          <CiLinkedin /> Aman Singh
+        <Link
+          to="#"
+          className="flex items-center gap-2 hover:text-blue-500 transition"
+        >
+          <CiLinkedin className="text-xl" /> Aman Singh
         </Link>
       </div>
     </footer>

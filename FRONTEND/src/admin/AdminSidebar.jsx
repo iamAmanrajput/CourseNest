@@ -45,7 +45,7 @@ function AdminSidebar() {
     <>
       {/* Mobile Hamburger Button */}
       <button
-        className="md:hidden fixed top-4 right-4 z-50 p-3 text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition-all"
+        className="md:hidden fixed top-4 left-4 z-50 p-3 text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 transition-all"
         onClick={() => setIsSidebarOpen(true)}
       >
         <FaBars className="text-2xl" />
